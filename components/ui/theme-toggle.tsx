@@ -1,10 +1,20 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 export function ThemeToggle() {
+  const isClient = useIsClient();
   const { resolvedTheme, setTheme } = useTheme();
-  const isDark = resolvedTheme !== "light";
+  const isDark = isClient ? resolvedTheme !== "light" : true;
 
   return (
     <button

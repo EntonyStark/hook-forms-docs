@@ -4,10 +4,10 @@ import { navLinks, siteConfig } from "@/app/constants/site";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[color:var(--page-bg)]/85 backdrop-blur-lg">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-lg">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4 sm:px-10 lg:px-16">
         <Link href="/" className="flex items-center gap-3">
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">
+          <span className="rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-card-foreground">
             {siteConfig.productName} {siteConfig.versionLabel}
           </span>
         </Link>
@@ -17,7 +17,7 @@ export function SiteHeader() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-slate-300 transition-colors hover:text-white"
+              className="text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
             </Link>

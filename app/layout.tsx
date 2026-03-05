@@ -34,9 +34,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground transition-colors">
+          <div className="relative min-h-screen bg-background text-foreground transition-colors">
             <div className="pointer-events-none absolute inset-x-0 top-[-10rem] z-0 flex justify-center">
-              <div className="h-[28rem] w-[48rem] rounded-full bg-gradient-to-r from-cyan-500/30 via-blue-500/30 to-indigo-500/30 blur-[140px]" />
+              <div className="h-[28rem] w-[48rem] rounded-full bg-linear-to-r from-cyan-500/30 via-blue-500/30 to-indigo-500/30 blur-[140px]" />
             </div>
             <SiteHeader />
             <div className="relative z-10">{children}</div>

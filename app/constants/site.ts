@@ -1,12 +1,15 @@
+import { ownerGitHubInfo } from "../../constants";
+
 export const siteConfig = {
   productName: "Hook Easy Form",
   versionLabel: "v3.0",
   owner: {
-    name: "Artem Stepanov",
-    company: "Hook Easy Form OSS",
+    name: ownerGitHubInfo.login,
+    company: "Open Source Maintainer",
+    profileUrl: ownerGitHubInfo.html_url,
   },
   links: {
-    github: "https://github.com/artemstepanov/hook-easy-form",
+    github: ownerGitHubInfo.html_url,
     discussions: "https://github.com/artemstepanov/hook-easy-form/discussions",
   },
 };
@@ -19,6 +22,7 @@ export const docsRoutes = [
 ] as const;
 
 export const navLinks = [
+  { label: "Home", href: "/" },
   ...docsRoutes,
   { label: "GitHub", href: siteConfig.links.github },
 ] as const;

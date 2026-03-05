@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { navLinks, nextStepCards, siteConfig } from "./constants/site";
-import { ThemeToggle } from "../components/ui/theme-toggle";
+import { nextStepCards, siteConfig } from "./constants/site";
 
 const featureHighlights = [
   {
@@ -81,272 +80,200 @@ const metrics = [
   { label: "Adoption", value: "45k weekly installs" },
 ];
 
-const codeSample = `import { useEasyForm } from "hook-easy-form";
+const codeSample = `import useEasyForm from "hook-easy-form";
 
-const checkoutForm = useEasyForm({
-  defaultValues: {
-    customer: {
-      email: "",
-      shippingMethod: "standard",
-    },
-    items: [{ sku: "starter", qty: 1, price: 29 }],
-    coupon: "",
-  },
-  validate: {
-    "customer.email": (value) =>
-      value.includes("@") ? null : "A valid email is required",
-    items: (rows) =>
-      rows.length === 0 ? "Add at least one line item" : null,
-  },
-  onSubmit(values) {
-    return createOrder(values);
-  },
-});
+type SignInForm = {
+  email: string;
+  password: string;
+};
 
-export function CheckoutEditor() {
-  const { form, list, value, setValue, submit, pending } = checkoutForm;
-
-  const applyCoupon = async () => {
-    const discount = await validateCoupon(value("coupon"));
-    setValue("items", (rows) => rows.map((row) => ({
-      ...row,
-      price: row.price * (1 - discount.percent / 100),
-    })));
-  };
+export function SignInCard() {
+  const { submitEvent, getProps, errors, valid, pristine, formObject } =
+    useEasyForm<SignInForm>({
+      initialForm: [
+        {
+          name: "email",
+          value: "",
+          options: {
+            type: "email",
+            placeholder: "team@company.com",
+            required: "Email is required",
+          },
+        },
+        {
+          name: "password",
+          value: "",
+          options: {
+            type: "password",
+            placeholder: "••••••••",
+            minLength: 8,
+            required: "Password is required",
+          },
+        },
+      ],
+    });
 
   return (
-    <form onSubmit={submit()} className="space-y-4">
-      <input {...form("customer.email")} placeholder="buyer@acme.com" />
+    <form onSubmit={submitEvent(loginUser)} className="space-y-3">
+      <input {...getProps("email", formObject.email.options, true)} />
+      {errors.email && <p>{errors.email}</p>}
 
-      {list("items").map((row) => (
-        <div key={row.key} className="grid grid-cols-3 gap-3">
-          <input {...row("sku")} />
-          <input {...row.number("qty")} min={1} />
-          <input {...row.currency("price")} />
-        </div>
-      ))}
+      <input {...getProps("password", formObject.password.options, true)} />
+      {errors.password && <p>{errors.password}</p>}
 
-      <div className="flex gap-2">
-        <input {...form("coupon")} placeholder="SPRING25" />
-        <button type="button" onClick={applyCoupon}>Apply</button>
-      </div>
-
-      <button type="submit" disabled={pending()}>
-        {pending() ? "Placing order…" : "Complete checkout"}
-      </button>
+      <button disabled={!valid || pristine}>Sign in</button>
     </form>
   );
 }`;
 
 export default function Home() {
   return (
-    <div className="relative overflow-hidden bg-[var(--page-bg)] text-[var(--page-text)] transition-colors">
-      <div className="pointer-events-none absolute inset-x-0 top-[-10rem] z-0 flex justify-center">
-        <div className="h-[28rem] w-[48rem] rounded-full bg-gradient-to-r from-cyan-500/30 via-blue-500/30 to-indigo-500/30 blur-[140px]" />
-      </div>
-
-      <main className="relative z-10 mx-auto flex max-w-6xl flex-col gap-24 px-6 pb-24 pt-12 sm:px-10 lg:px-16 lg:pb-32 lg:pt-20">
-        <header className="space-y-10">
-          <div className="flex flex-col gap-6 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">
-                {siteConfig.productName} {siteConfig.versionLabel}
-              </span>
-              <span className="text-slate-400">
-                The form engine built for hooks-first teams.
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <nav className="flex flex-wrap gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-slate-300 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </div>
-
-          <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm text-white">
-                <span className="text-emerald-300">New</span>
-                <span>Reactive arrays & schema-less validation</span>
-              </div>
-              <div className="space-y-6">
-                <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                  Welcome to predictable, hook-native forms.
-                </h1>
-                <p className="text-lg leading-relaxed text-slate-300">
-                  Hook Easy Form gives your team the smallest, most composable primitives for capturing data in React apps.
-                  Build confident onboarding flows, pricing configurators, and admin dashboards without babysitting state.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/docs/getting-started"
-                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5"
-                >
-                  Install &lt;HF /&gt;
-                </Link>
-                <Link
-                  href={siteConfig.links.github}
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:text-white"
-                >
-                  View on GitHub
-                </Link>
-              </div>
-              <dl className="grid gap-6 text-sm sm:grid-cols-3">
-                {metrics.map((metric) => (
-                  <div key={metric.label}>
-                    <dt className="text-slate-400">{metric.label}</dt>
-                    <dd className="text-xl font-semibold text-white">{metric.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl shadow-blue-500/10">
-              <p className="mb-3 text-xs uppercase tracking-[0.3em] text-slate-400">
-                DATA FLOW
-              </p>
-              <pre className="rounded-2xl border border-white/5 bg-black/60 p-5 text-sm leading-relaxed text-slate-100">
-                {codeSample}
-              </pre>
-              <p className="mt-4 text-sm text-slate-400">
-                Build realistic ordering and billing workflows with composable helpers, async side effects, and predictable submission lifecycles.
-              </p>
-            </div>
-          </div>
-        </header>
-
-        <section className="space-y-6">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">
-              FEATURES
-            </p>
-            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Designed for teams shipping ambitious workflows.
-            </h2>
-          </div>
-          <div className="grid gap-5 md:grid-cols-2">
-            {featureHighlights.map((item) => (
-              <div
-                key={item.title}
-                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.5)] transition hover:-translate-y-1"
-              >
-                <div className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">
-                  <span className="rounded-full bg-cyan-400/20 px-3 py-1 text-[11px] text-cyan-200">
-                    {item.badge}
-                  </span>
-                  <span className="text-slate-400">Capability</span>
-                </div>
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-base leading-relaxed text-slate-300">
-                  {item.description}
-                </p>
-                <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-10 lg:grid-cols-[3fr_2fr]">
-          <div className="space-y-8 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_35px_80px_rgba(15,23,42,0.45)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">
-              workflow
-            </p>
-            <h2 className="text-3xl font-semibold text-white">
-              Bring structure without losing velocity.
-            </h2>
-            <div className="space-y-8">
-              {workflow.map((step) => (
-                <div key={step.title} className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                  <h3 className="text-xl font-semibold text-white">{step.title}</h3>
-                  <p className="mt-2 text-slate-300">{step.description}</p>
-                  <ul className="mt-4 space-y-1 text-sm text-slate-400">
-                    {step.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-6 rounded-3xl border border-white/10 bg-gradient-to-b from-indigo-600/40 via-slate-900 to-slate-950 p-8 text-slate-100">
-            <h3 className="text-2xl font-semibold">Replace legacy config screens.</h3>
-            <p className="text-base text-slate-200">
-              Hook Easy Form pairs perfectly with shadcn/ui cards, inputs, and dialogs. Compose them just like the sections on this page: lightweight, theme-friendly, and accessible out of the box.
-            </p>
-            <div className="space-y-4 text-sm">
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">Snapshot</p>
-                <p className="mt-2 text-lg font-semibold text-white">Zero-config field arrays</p>
-                <p className="text-slate-300">
-                  Drag to reorder, duplicate, or remove rows while keeping IDs stable for React lists.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">Insight</p>
-                <p className="mt-2 text-lg font-semibold text-white">Telemetry ready</p>
-                <p className="text-slate-300">
-                  Stream dirty states, errors, and submission windows to PostHog or custom analytics.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">
-                DOCUMENTATION
-              </p>
-              <h2 className="text-3xl font-semibold text-white">
-                Choose your next stop.
-              </h2>
-            </div>
+    <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pb-24 pt-12 sm:px-10 lg:px-16 lg:pb-32 lg:pt-20">
+      <header className="space-y-10">
+        <div className="max-w-3xl space-y-4">
+          <p className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">
+            The form engine built for hooks-first teams
+          </p>
+          <h1 className="text-5xl font-semibold leading-tight text-white sm:text-6xl">
+            Build fast, type-safe forms with predictable rendering.
+          </h1>
+          <p className="max-w-2xl text-lg text-slate-300">
+            Hook Easy Form gives React teams composable state primitives for login,
+            checkout, dashboard, and onboarding workflows without extra runtime baggage.
+          </p>
+          <div className="flex flex-wrap gap-4">
             <Link
-              href={siteConfig.links.discussions}
-              className="text-sm text-cyan-200 underline-offset-4 hover:underline"
+              href="/docs/getting-started"
+              className="rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
             >
-              Join the community →
+              Start building
+            </Link>
+            <Link
+              href={siteConfig.links.github}
+              className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/40"
+            >
+              Star on GitHub
             </Link>
           </div>
-          <div className="grid gap-5 md:grid-cols-2">
-            {nextStepCards.map((card) => (
-              <Link
-                key={card.title}
-                href={card.href}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-cyan-400/40"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
-                  {card.action}
-                </p>
-                <h3 className="mt-3 text-2xl font-semibold text-white">{card.title}</h3>
-                <p className="mt-2 text-base text-slate-300">{card.description}</p>
-                <span className="mt-6 inline-flex items-center text-sm font-semibold text-cyan-200">
-                  {card.action} →
+        </div>
+
+        <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
+          <dl className="grid gap-6 rounded-3xl border border-white/10 bg-white/5 p-6 text-sm sm:grid-cols-3">
+            {metrics.map((metric) => (
+              <div key={metric.label}>
+                <dt className="text-slate-400">{metric.label}</dt>
+                <dd className="text-xl font-semibold text-white">{metric.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl shadow-blue-500/10">
+            <p className="mb-3 text-xs uppercase tracking-[0.3em] text-slate-400">DATA FLOW</p>
+            <pre className="rounded-2xl border border-white/5 bg-black/60 p-5 text-sm leading-relaxed text-slate-100">
+              {codeSample}
+            </pre>
+            <p className="mt-4 text-sm text-slate-400">
+              Realistic auth setup with inline validation, form-level state, and submit guards.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <section className="space-y-6">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">FEATURES</p>
+          <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Designed for teams shipping ambitious workflows.
+          </h2>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          {featureHighlights.map((item) => (
+            <div
+              key={item.title}
+              className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.5)] transition hover:-translate-y-1"
+            >
+              <div className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">
+                <span className="rounded-full bg-cyan-400/20 px-3 py-1 text-[11px] text-cyan-200">
+                  {item.badge}
                 </span>
-              </Link>
+                <span className="text-slate-400">Capability</span>
+              </div>
+              <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-slate-300">{item.description}</p>
+              <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-10 lg:grid-cols-[3fr_2fr]">
+        <div className="space-y-8 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_35px_80px_rgba(15,23,42,0.45)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">workflow</p>
+          <h2 className="text-3xl font-semibold text-white">Bring structure without losing velocity.</h2>
+          <div className="space-y-8">
+            {workflow.map((step) => (
+              <div key={step.title} className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+                <h3 className="text-xl font-semibold text-white">{step.title}</h3>
+                <p className="mt-2 text-slate-300">{step.description}</p>
+                <ul className="mt-4 space-y-1 text-sm text-slate-400">
+                  {step.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
-        </section>
+        </div>
+        <div className="space-y-6 rounded-3xl border border-white/10 bg-gradient-to-b from-indigo-600/40 via-slate-900 to-slate-950 p-8 text-slate-100">
+          <h3 className="text-2xl font-semibold">Replace legacy config screens.</h3>
+          <p className="text-base text-slate-200">
+            Hook Easy Form pairs perfectly with shadcn/ui cards, inputs, and dialogs. Compose them
+            just like the sections on this page: lightweight, theme-friendly, and accessible out of the
+            box.
+          </p>
+        </div>
+      </section>
 
-        <footer className="flex flex-col items-start gap-3 border-t border-white/5 pt-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} {siteConfig.productName}</span>
-          <span>Maintained by {siteConfig.owner.name} ({siteConfig.owner.company}).</span>
-        </footer>
-      </main>
-    </div>
+      <section className="space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">DOCUMENTATION</p>
+            <h2 className="text-3xl font-semibold text-white">Choose your next stop.</h2>
+          </div>
+          <Link
+            href={siteConfig.links.discussions}
+            className="text-sm text-cyan-200 underline-offset-4 hover:underline"
+          >
+            Join the community →
+          </Link>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          {nextStepCards.map((card) => (
+            <Link
+              key={card.title}
+              href={card.href}
+              className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-cyan-400/40"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">{card.action}</p>
+              <h3 className="mt-3 text-2xl font-semibold text-white">{card.title}</h3>
+              <p className="mt-2 text-base text-slate-300">{card.description}</p>
+              <span className="mt-6 inline-flex items-center text-sm font-semibold text-cyan-200">
+                {card.action} →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <footer className="flex flex-col items-start gap-3 border-t border-white/5 pt-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+        <span>© {new Date().getFullYear()} {siteConfig.productName}</span>
+        <span>
+          Maintained by <Link href={siteConfig.owner.profileUrl} className="underline-offset-4 hover:underline">{siteConfig.owner.name}</Link> ({siteConfig.owner.company}).
+        </span>
+      </footer>
+    </main>
   );
 }

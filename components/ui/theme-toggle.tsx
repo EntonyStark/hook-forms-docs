@@ -30,7 +30,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="inline-flex h-9 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-200 transition hover:border-white/30"
+      className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 bg-slate-950/85 px-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100 shadow-lg shadow-black/25 transition hover:border-white/40"
       aria-label="Toggle theme"
       suppressHydrationWarning
     >

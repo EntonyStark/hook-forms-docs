@@ -147,12 +147,12 @@ export default function Home() {
 
       <main className="relative z-10 mx-auto flex max-w-6xl flex-col gap-24 px-6 pb-24 pt-12 sm:px-10 lg:px-16 lg:pb-32 lg:pt-20">
         <header className="space-y-10">
-          <div className="flex flex-col gap-6 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-6 text-sm text-[var(--text-muted)] md:flex-row md:items-center md:justify-between">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">
+              <span className="rounded-full border border-[var(--surface-card-border)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-strong)]">
                 {siteConfig.productName} {siteConfig.versionLabel}
               </span>
-              <span className="text-slate-400">
+              <span className="text-[var(--text-subtle)]">
                 The form engine built for hooks-first teams.
               </span>
             </div>
@@ -163,7 +163,7 @@ export default function Home() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-slate-300 transition-colors hover:text-white"
+                    className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-strong)]"
                   >
                     {link.label}
                   </Link>
@@ -174,15 +174,15 @@ export default function Home() {
 
           <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm text-white">
+              <div className="inline-flex items-center gap-3 rounded-full border border-[var(--surface-card-border)] bg-[var(--surface-card)] px-4 py-1 text-sm text-[var(--text-strong)]">
                 <span className="text-emerald-300">New</span>
                 <span>Reactive arrays & schema-less validation</span>
               </div>
               <div className="space-y-6">
-                <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                <h1 className="text-4xl font-semibold tracking-tight text-[var(--text-strong)] sm:text-5xl lg:text-6xl">
                   Welcome to predictable, hook-native forms.
                 </h1>
-                <p className="text-lg leading-relaxed text-slate-300">
+                <p className="text-lg leading-relaxed text-[var(--text-muted)]">
                   Hook Easy Form gives your team the smallest, most composable primitives for capturing data in React apps.
                   Build confident onboarding flows, pricing configurators, and admin dashboards without babysitting state.
                 </p>
@@ -196,7 +196,7 @@ export default function Home() {
                 </Link>
                 <Link
                   href={siteConfig.links.github}
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:text-white"
+                  className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-[var(--text-strong)] transition hover:border-white hover:text-[var(--text-strong)]"
                 >
                   View on GitHub
                 </Link>
@@ -204,21 +204,21 @@ export default function Home() {
               <dl className="grid gap-6 text-sm sm:grid-cols-3">
                 {metrics.map((metric) => (
                   <div key={metric.label}>
-                    <dt className="text-slate-400">{metric.label}</dt>
-                    <dd className="text-xl font-semibold text-white">{metric.value}</dd>
+                    <dt className="text-[var(--text-subtle)]">{metric.label}</dt>
+                    <dd className="text-xl font-semibold text-[var(--text-strong)]">{metric.value}</dd>
                   </div>
                 ))}
               </dl>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl shadow-blue-500/10">
-              <p className="mb-3 text-xs uppercase tracking-[0.3em] text-slate-400">
+            <div className="rounded-3xl border border-[var(--surface-card-border)] bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl shadow-blue-500/10">
+              <p className="mb-3 text-xs uppercase tracking-[0.3em] text-[var(--text-subtle)]">
                 DATA FLOW
               </p>
               <pre className="rounded-2xl border border-white/5 bg-black/60 p-5 text-sm leading-relaxed text-slate-100">
                 {codeSample}
               </pre>
-              <p className="mt-4 text-sm text-slate-400">
+              <p className="mt-4 text-sm text-[var(--text-subtle)]">
                 Build realistic ordering and billing workflows with composable helpers, async side effects, and predictable submission lifecycles.
               </p>
             </div>
@@ -227,10 +227,10 @@ export default function Home() {
 
         <section className="space-y-6">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">
+            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-[var(--text-subtle)]">
               FEATURES
             </p>
-            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-strong)] sm:text-4xl">
               Designed for teams shipping ambitious workflows.
             </h2>
           </div>
@@ -238,16 +238,16 @@ export default function Home() {
             {featureHighlights.map((item) => (
               <div
                 key={item.title}
-                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.5)] transition hover:-translate-y-1"
+                className="group relative overflow-hidden rounded-3xl border border-[var(--surface-card-border)] bg-[var(--surface-card)] p-6 shadow-[0_25px_70px_rgba(15,23,42,0.5)] transition hover:-translate-y-1"
               >
-                <div className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">
-                  <span className="rounded-full bg-cyan-400/20 px-3 py-1 text-[11px] text-cyan-200">
+                <div className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--accent-text)]">
+                  <span className="rounded-full bg-[var(--badge-bg)] px-3 py-1 text-[11px] text-[var(--badge-text)]">
                     {item.badge}
                   </span>
-                  <span className="text-slate-400">Capability</span>
+                  <span className="text-[var(--text-subtle)]">Capability</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-base leading-relaxed text-slate-300">
+                <h3 className="text-xl font-semibold text-[var(--text-strong)]">{item.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-[var(--text-muted)]">
                   {item.description}
                 </p>
                 <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent" />
@@ -257,19 +257,19 @@ export default function Home() {
         </section>
 
         <section className="grid gap-10 lg:grid-cols-[3fr_2fr]">
-          <div className="space-y-8 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_35px_80px_rgba(15,23,42,0.45)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">
+          <div className="space-y-8 rounded-3xl border border-[var(--surface-card-border)] bg-[var(--surface-card)] p-8 shadow-[0_35px_80px_rgba(15,23,42,0.45)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-[var(--text-subtle)]">
               workflow
             </p>
-            <h2 className="text-3xl font-semibold text-white">
+            <h2 className="text-3xl font-semibold text-[var(--text-strong)]">
               Bring structure without losing velocity.
             </h2>
             <div className="space-y-8">
               {workflow.map((step) => (
-                <div key={step.title} className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                  <h3 className="text-xl font-semibold text-white">{step.title}</h3>
-                  <p className="mt-2 text-slate-300">{step.description}</p>
-                  <ul className="mt-4 space-y-1 text-sm text-slate-400">
+                <div key={step.title} className="rounded-2xl border border-[var(--surface-card-border)] bg-slate-950/60 p-5">
+                  <h3 className="text-xl font-semibold text-[var(--text-strong)]">{step.title}</h3>
+                  <p className="mt-2 text-[var(--text-muted)]">{step.description}</p>
+                  <ul className="mt-4 space-y-1 text-sm text-[var(--text-subtle)]">
                     {step.bullets.map((bullet) => (
                       <li key={bullet} className="flex items-center gap-2">
                         <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
@@ -281,23 +281,23 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="space-y-6 rounded-3xl border border-white/10 bg-gradient-to-b from-indigo-600/40 via-slate-900 to-slate-950 p-8 text-slate-100">
+          <div className="space-y-6 rounded-3xl border border-[var(--surface-card-border)] bg-gradient-to-b from-indigo-600/40 via-slate-900 to-slate-950 p-8 text-slate-100">
             <h3 className="text-2xl font-semibold">Replace legacy config screens.</h3>
-            <p className="text-base text-slate-200">
+            <p className="text-base text-[var(--text-strong)]">
               Hook Easy Form pairs perfectly with shadcn/ui cards, inputs, and dialogs. Compose them just like the sections on this page: lightweight, theme-friendly, and accessible out of the box.
             </p>
             <div className="space-y-4 text-sm">
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">Snapshot</p>
-                <p className="mt-2 text-lg font-semibold text-white">Zero-config field arrays</p>
-                <p className="text-slate-300">
+              <div className="rounded-2xl border border-[var(--surface-card-border)] bg-black/30 p-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-[var(--text-subtle)]">Snapshot</p>
+                <p className="mt-2 text-lg font-semibold text-[var(--text-strong)]">Zero-config field arrays</p>
+                <p className="text-[var(--text-muted)]">
                   Drag to reorder, duplicate, or remove rows while keeping IDs stable for React lists.
                 </p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">Insight</p>
-                <p className="mt-2 text-lg font-semibold text-white">Telemetry ready</p>
-                <p className="text-slate-300">
+              <div className="rounded-2xl border border-[var(--surface-card-border)] bg-black/30 p-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-[var(--text-subtle)]">Insight</p>
+                <p className="mt-2 text-lg font-semibold text-[var(--text-strong)]">Telemetry ready</p>
+                <p className="text-[var(--text-muted)]">
                   Stream dirty states, errors, and submission windows to PostHog or custom analytics.
                 </p>
               </div>
@@ -308,16 +308,16 @@ export default function Home() {
         <section className="space-y-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-400">
+              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-[var(--text-subtle)]">
                 DOCUMENTATION
               </p>
-              <h2 className="text-3xl font-semibold text-white">
+              <h2 className="text-3xl font-semibold text-[var(--text-strong)]">
                 Choose your next stop.
               </h2>
             </div>
             <Link
               href={siteConfig.links.discussions}
-              className="text-sm text-cyan-200 underline-offset-4 hover:underline"
+              className="text-sm text-[var(--accent-text)] underline-offset-4 hover:underline"
             >
               Join the community →
             </Link>
@@ -327,14 +327,14 @@ export default function Home() {
               <Link
                 key={card.title}
                 href={card.href}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-cyan-400/40"
+                className="rounded-3xl border border-[var(--surface-card-border)] bg-[var(--surface-card)] p-6 transition hover:-translate-y-1 hover:border-cyan-400/40"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--text-subtle)]">
                   {card.action}
                 </p>
-                <h3 className="mt-3 text-2xl font-semibold text-white">{card.title}</h3>
-                <p className="mt-2 text-base text-slate-300">{card.description}</p>
-                <span className="mt-6 inline-flex items-center text-sm font-semibold text-cyan-200">
+                <h3 className="mt-3 text-2xl font-semibold text-[var(--text-strong)]">{card.title}</h3>
+                <p className="mt-2 text-base text-[var(--text-muted)]">{card.description}</p>
+                <span className="mt-6 inline-flex items-center text-sm font-semibold text-[var(--accent-text)]">
                   {card.action} →
                 </span>
               </Link>
@@ -342,7 +342,7 @@ export default function Home() {
           </div>
         </section>
 
-        <footer className="flex flex-col items-start gap-3 border-t border-white/5 pt-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+        <footer className="flex flex-col items-start gap-3 border-t border-white/5 pt-8 text-sm text-[var(--text-subtle)] sm:flex-row sm:items-center sm:justify-between">
           <span>© {new Date().getFullYear()} {siteConfig.productName}</span>
           <span>Maintained by {siteConfig.owner.name} ({siteConfig.owner.company}).</span>
         </footer>

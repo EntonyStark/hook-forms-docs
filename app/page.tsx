@@ -1,12 +1,7 @@
 import Link from "next/link";
 
-const navLinks = [
-  { label: "Getting started", href: "/docs/getting-started" },
-  { label: "API", href: "/docs/api" },
-  { label: "Examples", href: "/docs/examples" },
-  { label: "Form constructor", href: "/form-constructor" },
-  { label: "GitHub", href: "https://github.com/artemstepanov/hook-easy-form" },
-];
+import { navLinks, nextStepCards, siteConfig } from "./constants/site";
+import { ThemeToggle } from "../components/ui/theme-toggle";
 
 const featureHighlights = [
   {
@@ -80,33 +75,6 @@ const workflow = [
   },
 ];
 
-const ctas = [
-  {
-    title: "Start building",
-    description: "Install the package and scaffold your first form in minutes.",
-    action: "Installation guide",
-    href: "/docs/getting-started",
-  },
-  {
-    title: "Browse the API",
-    description: "Find the exact hook or helper for complex flows.",
-    action: "Read API docs",
-    href: "/docs/api",
-  },
-  {
-    title: "See it in action",
-    description: "Copy composable recipes for real-world UIs and dashboards.",
-    action: "Explore examples",
-    href: "/docs/examples",
-  },
-  {
-    title: "Design forms visually",
-    description: "Use the experimental constructor to share JSON schemas with your team.",
-    action: "Open constructor",
-    href: "/form-constructor",
-  },
-];
-
 const metrics = [
   { label: "Bundle size", value: "1.6 kB" },
   { label: "Render isolation", value: "<10 ms diff" },
@@ -115,34 +83,56 @@ const metrics = [
 
 const codeSample = `import { useEasyForm } from "hook-easy-form";
 
-const invoiceForm = useEasyForm({
+const checkoutForm = useEasyForm({
   defaultValues: {
-    customer: "",
-    items: [{ name: "", qty: 1, price: 0 }],
+    customer: {
+      email: "",
+      shippingMethod: "standard",
+    },
+    items: [{ sku: "starter", qty: 1, price: 29 }],
+    coupon: "",
+  },
+  validate: {
+    "customer.email": (value) =>
+      value.includes("@") ? null : "A valid email is required",
+    items: (rows) =>
+      rows.length === 0 ? "Add at least one line item" : null,
   },
   onSubmit(values) {
-    return saveInvoice(values);
+    return createOrder(values);
   },
 });
 
-export function InvoiceEditor() {
-  const { form, list, submit, pending } = invoiceForm;
+export function CheckoutEditor() {
+  const { form, list, value, setValue, submit, pending } = checkoutForm;
+
+  const applyCoupon = async () => {
+    const discount = await validateCoupon(value("coupon"));
+    setValue("items", (rows) => rows.map((row) => ({
+      ...row,
+      price: row.price * (1 - discount.percent / 100),
+    })));
+  };
 
   return (
     <form onSubmit={submit()} className="space-y-4">
-      <input {...form("customer")}
-        placeholder="ACME Inc." className="field" />
+      <input {...form("customer.email")} placeholder="buyer@acme.com" />
 
-      {list("items").map((item, index) => (
-        <div key={item.key} className="grid grid-cols-3 gap-3">
-          <input {...item("name")} placeholder="Feature work" />
-          <input {...item.number("qty")} min={1} />
-          <input {...item.currency("price")} />
+      {list("items").map((row) => (
+        <div key={row.key} className="grid grid-cols-3 gap-3">
+          <input {...row("sku")} />
+          <input {...row.number("qty")} min={1} />
+          <input {...row.currency("price")} />
         </div>
       ))}
 
+      <div className="flex gap-2">
+        <input {...form("coupon")} placeholder="SPRING25" />
+        <button type="button" onClick={applyCoupon}>Apply</button>
+      </div>
+
       <button type="submit" disabled={pending()}>
-        {pending() ? "Saving…" : "Save invoice"}
+        {pending() ? "Placing order…" : "Complete checkout"}
       </button>
     </form>
   );
@@ -150,7 +140,7 @@ export function InvoiceEditor() {
 
 export default function Home() {
   return (
-    <div className="relative overflow-hidden bg-slate-950 text-slate-100">
+    <div className="relative overflow-hidden bg-[var(--page-bg)] text-[var(--page-text)] transition-colors">
       <div className="pointer-events-none absolute inset-x-0 top-[-10rem] z-0 flex justify-center">
         <div className="h-[28rem] w-[48rem] rounded-full bg-gradient-to-r from-cyan-500/30 via-blue-500/30 to-indigo-500/30 blur-[140px]" />
       </div>
@@ -160,23 +150,26 @@ export default function Home() {
           <div className="flex flex-col gap-6 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
             <div className="flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">
-                Hook Easy Form v3.0
+                {siteConfig.productName} {siteConfig.versionLabel}
               </span>
               <span className="text-slate-400">
                 The form engine built for hooks-first teams.
               </span>
             </div>
-            <nav className="flex flex-wrap gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-slate-300 transition-colors hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <nav className="flex flex-wrap gap-4">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="text-slate-300 transition-colors hover:text-white"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
           </div>
 
           <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
@@ -202,7 +195,7 @@ export default function Home() {
                   Install &lt;HF /&gt;
                 </Link>
                 <Link
-                  href="https://github.com/artemstepanov/hook-easy-form"
+                  href={siteConfig.links.github}
                   className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:text-white"
                 >
                   View on GitHub
@@ -226,7 +219,7 @@ export default function Home() {
                 {codeSample}
               </pre>
               <p className="mt-4 text-sm text-slate-400">
-                Focus on declarative intent, not wiring. All helpers are tree-shakeable and work with Suspense.
+                Build realistic ordering and billing workflows with composable helpers, async side effects, and predictable submission lifecycles.
               </p>
             </div>
           </div>
@@ -323,14 +316,14 @@ export default function Home() {
               </h2>
             </div>
             <Link
-              href="https://github.com/artemstepanov/hook-easy-form/discussions"
+              href={siteConfig.links.discussions}
               className="text-sm text-cyan-200 underline-offset-4 hover:underline"
             >
               Join the community →
             </Link>
           </div>
           <div className="grid gap-5 md:grid-cols-2">
-            {ctas.map((card) => (
+            {nextStepCards.map((card) => (
               <Link
                 key={card.title}
                 href={card.href}
@@ -350,8 +343,8 @@ export default function Home() {
         </section>
 
         <footer className="flex flex-col items-start gap-3 border-t border-white/5 pt-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} Hook Easy Form</span>
-          <span>Maintained by Artem Stepanov and contributors.</span>
+          <span>© {new Date().getFullYear()} {siteConfig.productName}</span>
+          <span>Maintained by {siteConfig.owner.name} ({siteConfig.owner.company}).</span>
         </footer>
       </main>
     </div>

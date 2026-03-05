@@ -157,8 +157,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-center">
-          <dl className="grid gap-6 rounded-3xl border border-border bg-card/70 p-6 text-sm sm:grid-cols-3">
+        <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:items-start">
+          <dl className="grid gap-6 self-start rounded-3xl border border-border bg-card/70 p-6 text-sm sm:grid-cols-3">
             {metrics.map((metric) => (
               <div key={metric.label}>
                 <dt className="text-muted-foreground">{metric.label}</dt>

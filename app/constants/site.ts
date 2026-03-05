@@ -22,7 +22,6 @@ export const docsRoutes = [
 ] as const;
 
 export const navLinks = [
-  { label: "Home", href: "/" },
   ...docsRoutes,
   { label: "GitHub", href: siteConfig.links.github },
 ] as const;
